@@ -29,8 +29,8 @@
   "scripts": {
     "prebuild": "npm run type-check && npm run clean",
     "dr:surge": "node dr-surge.js",
-    "build": "export NODE_ENV=production; webpack --config webpack.prod.js && npm run dr:surge",
-    "start": "export NODE_ENV=development; webpack serve --color --progress --config webpack.dev.js",
+    "build": "export NODE_ENV=production; webpack --config ./config/webpack.prod.js && npm run dr:surge",
+    "start": "export NODE_ENV=development; webpack serve --color --progress --config ./config/webpack.dev.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -39,7 +39,7 @@
     "format": "prettier --check --write ./src/**/*.{tsx,ts}",
     "type-check": "tsc --noEmit",
     "ci-checks": "npm run type-check && npm run lint && npm run test:coverage",
-    "build:bundle-profile": "webpack --config webpack.prod.js --profile --json > stats.json",
+    "build:bundle-profile": "webpack --config ./config/webpack.prod.js --profile --json > stats.json",
     "bundle-profile:analyze": "npm run build:bundle-profile && webpack-bundle-analyzer ./stats.json",
     "clean": "rimraf dist"
   },
