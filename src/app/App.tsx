@@ -1,34 +1,22 @@
 import React from 'react';
 import '@patternfly/react-core/dist/styles/base.css';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter } from 'react-router-dom';
 import I18n from '../components/i18n/I18n';
+import { useLocale } from '../components/sessionContext/SessionProvider';
 import AppLayout from './appLayout/AppLayout';
 import { AppRoutes } from './routes';
 
 import './app.css';
 
-const queryClient = new QueryClient();
-
-const getLocale = () => {
-  const locale = {
-    value: process.env.REACT_APP_CONFIG_SERVICE_LOCALES_DEFAULT_LNG,
-    key: process.env.REACT_APP_CONFIG_SERVICE_LOCALES_DEFAULT_LNG_DESC
-  };
-  return locale;
-};
-
 const App: React.FC = () => {
-  const locale = getLocale();
+  const locale = useLocale();
 
   return (
-    <I18n locale={locale.value}>
+    <I18n locale={locale}>
       <BrowserRouter>
-        <QueryClientProvider client={queryClient}>
-          <AppLayout>
-            <AppRoutes />
-          </AppLayout>
-        </QueryClientProvider>
+        <AppLayout>
+          <AppRoutes />
+        </AppLayout>
       </BrowserRouter>
     </I18n>
   );

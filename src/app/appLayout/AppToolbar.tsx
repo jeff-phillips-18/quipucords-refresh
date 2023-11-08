@@ -9,6 +9,7 @@ import {
   ToolbarItem
 } from '@patternfly/react-core';
 import { EllipsisVIcon, QuestionCircleIcon } from '@patternfly/react-icons';
+import { useUsername } from '../../components/sessionContext/SessionProvider';
 
 import '@patternfly/react-styles/css/components/Avatar/avatar.css';
 import './AppToolbar.css';
@@ -17,6 +18,7 @@ const AppToolbar: React.FunctionComponent = () => {
   const [helpOpen, setHelpOpen] = React.useState<boolean>(false);
   const [userDropdownOpen, setUserDropdownOpen] = React.useState<boolean>(false);
   const [kebabDropdownOpen, setKebabDropdownOpen] = React.useState<boolean>(false);
+  const userName = useUsername();
 
   const onAbout = () => {};
 
@@ -48,7 +50,10 @@ const AppToolbar: React.FunctionComponent = () => {
           align={{ default: 'alignRight' }}
           spacer={{ default: 'spacerNone', md: 'spacerMd' }}
         >
-          <ToolbarGroup variant="icon-button-group" visibility={{ default: 'hidden', lg: 'visible' }}>
+          <ToolbarGroup
+            variant="icon-button-group"
+            visibility={{ default: 'hidden', lg: 'visible' }}
+          >
             <ToolbarItem>
               <Dropdown
                 popperProps={{ position: 'right' }}
@@ -116,7 +121,7 @@ const AppToolbar: React.FunctionComponent = () => {
               >
                 <div className="quipucords-toolbar__user-dropdown">
                   <span className="pf-v5-c-avatar" />
-                  USER NAME
+                  {userName}
                 </div>
               </MenuToggle>
             )}
