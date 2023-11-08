@@ -39,7 +39,12 @@ type colorToken = {
   var: string;
 };
 
-const ContextIconColors: { gray: colorToken; green: colorToken; yellow: colorToken; red: colorToken } = {
+const ContextIconColors: {
+  gray: colorToken;
+  green: colorToken;
+  yellow: colorToken;
+  red: colorToken;
+} = {
   gray,
   green,
   yellow,
@@ -76,7 +81,11 @@ const ContextIconVariant: { [key: string]: string } = {
   acs: 'acs'
 };
 
-const ContextIcon: React.FC<{ symbol: string; size?: 'sm' | 'md' | 'lg' | 'xl' }> = ({ symbol, size, ...props }) => {
+const ContextIcon: React.FC<{ symbol: string; size?: 'sm' | 'md' | 'lg' | 'xl' }> = ({
+  symbol,
+  size,
+  ...props
+}) => {
   switch (symbol) {
     case ContextIconVariant.ansible:
       return <AnsibleTowerIcon {...props} />;

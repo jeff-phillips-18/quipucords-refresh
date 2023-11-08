@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { initReactI18next } from 'react-i18next';
-import i18next from 'i18next';
+import { use as i18nextUse, changeLanguage } from 'i18next';
 import XHR from 'i18next-xhr-backend';
 import { helpers } from '../../common';
 import { EMPTY_CONTEXT, translate } from './i18nHelpers';
@@ -9,7 +9,7 @@ interface I18nProps {
   children: React.ReactNode;
   fallbackLng?: string;
   loadPath?: string;
-  locale?: string;
+  locale?: string | null;
 }
 
 const I18n: React.FunctionComponent<I18nProps> = ({
@@ -22,8 +22,7 @@ const I18n: React.FunctionComponent<I18nProps> = ({
 
   React.useEffect(() => {
     let canceled = false;
-    i18next
-      .use(XHR)
+    i18nextUse(XHR)
       .use(initReactI18next)
       .init({
         backend: {
@@ -55,7 +54,7 @@ const I18n: React.FunctionComponent<I18nProps> = ({
   useEffect(() => {
     if (initialized && locale) {
       try {
-        i18next.changeLanguage(locale);
+        changeLanguage(locale);
       } catch (e) {
         //
       }

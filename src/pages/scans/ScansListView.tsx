@@ -6,7 +6,7 @@ import axios from 'axios';
 const SOURCES_LIST_QUERY = 'scansList';
 
 const ScansListView: React.FunctionComponent = () => {
-  const { isLoading, error, data, isFetching } = useQuery({
+  useQuery({
     queryKey: [SOURCES_LIST_QUERY],
     queryFn: () => axios.get(`${process.env.REACT_APP_SCANS_SERVICE}`).then(res => res.data)
   });

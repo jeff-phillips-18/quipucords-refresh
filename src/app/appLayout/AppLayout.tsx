@@ -31,7 +31,11 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
   const Header = (
     <Masthead>
       <MastheadToggle>
-        <Button variant="plain" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label="Global navigation">
+        <Button
+          variant="plain"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          aria-label="Global navigation"
+        >
           <BarsIcon />
         </Button>
       </MastheadToggle>
@@ -49,7 +53,11 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
   const location = useLocation();
 
   const renderNavItem = (route: IAppRoute, index: number) => (
-    <NavItem key={`${route.label}-${index}`} id={`${route.label}-${index}`} isActive={route.path === location.pathname}>
+    <NavItem
+      key={`${route.label}-${index}`}
+      id={`${route.label}-${index}`}
+      isActive={route.path === location.pathname}
+    >
       <NavLink to={route.path}>{route.label}</NavLink>
     </NavItem>
   );
@@ -69,7 +77,8 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
     <Nav id="nav-primary-simple" theme="dark">
       <NavList id="nav-list-simple">
         {routes.map(
-          (route, idx) => route.label && (!route.routes ? renderNavItem(route, idx) : renderNavGroup(route, idx))
+          (route, idx) =>
+            route.label && (!route.routes ? renderNavItem(route, idx) : renderNavGroup(route, idx))
         )}
       </NavList>
     </Nav>
@@ -98,7 +107,12 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
     </SkipToContent>
   );
   return (
-    <Page mainContainerId={pageId} header={Header} sidebar={sidebarOpen && Sidebar} skipToContent={PageSkipToContent}>
+    <Page
+      mainContainerId={pageId}
+      header={Header}
+      sidebar={sidebarOpen && Sidebar}
+      skipToContent={PageSkipToContent}
+    >
       {children}
     </Page>
   );

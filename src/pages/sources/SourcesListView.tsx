@@ -30,8 +30,9 @@ import { Table, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 import axios from 'axios';
 import moment from 'moment';
 import { helpers } from '../../common';
-import ContextIcon, { ContextIconVariant } from '../../components/contextIcon/contextIcon';
-import RefreshTimeButton from '../../components/refreshTimeButton/RefreshTimeButton';
+import { ContextIcon, ContextIconVariant } from '../../components/contextIcon/contextIcon';
+import { i18nHelpers } from '../../components/i18n/i18nHelpers';
+import { RefreshTimeButton } from '../../components/refreshTimeButton/RefreshTimeButton';
 import useSearchParam from '../../hooks/useSearchParam';
 import { SourceType } from '../../types';
 import SourceActionMenu from './SourceActionMenu';
@@ -50,8 +51,8 @@ const SourceTypeLabels = {
 const SourcesListView: React.FunctionComponent = () => {
   const { t } = useTranslation();
   const [refreshTime, setRefreshTime] = React.useState<Date | null>();
-  const [sortColumn] = useSearchParam('sortColumn');
-  const [sortDirection] = useSearchParam('sortDirection');
+  const [sortColumn] = useSearchParam('sortColumn') || ['name'];
+  const [sortDirection] = useSearchParam('sortDirection') || ['asc'];
   const [filters] = useSearchParam('filters');
   const [selectedItems, setSelectedItems] = React.useState<SourceType[]>([]);
   const queryClient = useQueryClient();
@@ -124,10 +125,15 @@ const SourcesListView: React.FunctionComponent = () => {
     // Because isSortEnabled is true, TypeScript will require these sort-related properties:
     sortableColumns: ['name', 'connection', 'type', 'credentials', 'unreachableSystems'],
     initialSort: {
-      columnKey: sortColumn ? (sortColumn.slice(sortColumn.startsWith('-') ? 1 : 0) as any) : 'name',
-      direction: sortColumn?.startsWith('-') ? 'desc' : 'asc'
+      columnKey: sortColumn as
+        | 'name'
+        | 'connection'
+        | 'type'
+        | 'credentials'
+        | 'unreachableSystems',
+      direction: sortDirection as 'asc' | 'desc'
     },
-    initialFilterValues: filters? JSON.parse(filters) : undefined
+    initialFilterValues: filters ? JSON.parse(filters) : undefined
   });
 
   const {
@@ -244,7 +250,8 @@ const SourcesListView: React.FunctionComponent = () => {
           <Button
             variant={ButtonVariant.secondary}
             isDisabled={
-              Object.values(tableBatteries.selectionState.selectedItems).filter(val => val !== null).length <= 1
+              Object.values(tableBatteries.selectionState.selectedItems).filter(val => val !== null)
+                .length <= 1
             }
             onClick={onScanSources}
           >
@@ -252,7 +259,12 @@ const SourcesListView: React.FunctionComponent = () => {
           </Button>
         </ToolbarItem>
         <ToolbarItem {...paginationToolbarItemProps}>
-          <Pagination variant="top" isCompact {...paginationProps} widgetId="client-paginated-example-pagination" />
+          <Pagination
+            variant="top"
+            isCompact
+            {...paginationProps}
+            widgetId="client-paginated-example-pagination"
+          />
         </ToolbarItem>
       </ToolbarContent>
     </Toolbar>
@@ -273,13 +285,16 @@ const SourcesListView: React.FunctionComponent = () => {
       source.connection.status === 'running';
     const scanTime = (isPending && source.connection.start_time) || source.connection.end_time;
 
+    const statusString = i18nHelpers.translate(t, 'table.label', {
+      context: ['status', source.connection.status, 'sources']
+    });
     return (
       <Flex gap={{ default: 'gapSm' }}>
         <FlexItem>
           <ContextIcon symbol={ContextIconVariant[source.connection.status]} />
         </FlexItem>
         <FlexItem>
-          <div>{t('table.label', { context: ['status', source.connection.status, 'sources'] })}</div>
+          <div>{statusString}</div>
           {getTimeDisplayHowLongAgo(scanTime)}
         </FlexItem>
       </Flex>
@@ -322,10 +337,14 @@ const SourcesListView: React.FunctionComponent = () => {
                 <TableRowContentWithBatteries {...tableBatteries} item={source} rowIndex={rowIndex}>
                   <Td {...getTdProps({ columnKey: 'name' })}>{source.name}</Td>
                   <Td {...getTdProps({ columnKey: 'connection' })}>{renderConnection(source)}</Td>
-                  <Td {...getTdProps({ columnKey: 'type' })}>{SourceTypeLabels[source.source_type]}</Td>
+                  <Td {...getTdProps({ columnKey: 'type' })}>
+                    {SourceTypeLabels[source.source_type]}
+                  </Td>
                   <Td {...getTdProps({ columnKey: 'credentials' })}>{source.credentials.length}</Td>
                   <Td {...getTdProps({ columnKey: 'unreachableSystems' })}>
-                    {helpers.devModeNormalizeCount(source.connection?.source_systems_unreachable ?? 0)}
+                    {helpers.devModeNormalizeCount(
+                      source.connection?.source_systems_unreachable ?? 0
+                    )}
                   </Td>
                   <Td {...getTdProps({ columnKey: 'scan' })}>
                     <Button variant={ButtonVariant.link} onClick={() => onScanSource(source)}>
@@ -341,7 +360,12 @@ const SourcesListView: React.FunctionComponent = () => {
           </Tbody>
         </ConditionalTableBody>
       </Table>
-      <Pagination variant="bottom" isCompact {...paginationProps} widgetId="server-paginated-example-pagination" />
+      <Pagination
+        variant="bottom"
+        isCompact
+        {...paginationProps}
+        widgetId="server-paginated-example-pagination"
+      />
     </PageSection>
   );
 };

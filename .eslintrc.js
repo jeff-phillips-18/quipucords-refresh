@@ -93,7 +93,15 @@ module.exports = {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "@typescript-eslint/interface-name-prefix": "off",
-    "prettier/prettier": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "arrowParens": "avoid",
+        "singleQuote": true,
+        "trailingComma": "none",
+        "printWidth": 100
+      }
+    ],
     "import/no-unresolved": "off",
     "import/extensions": "off",
     "react/prop-types": "off"

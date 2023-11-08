@@ -1,21 +1,27 @@
 import React from 'react';
 import { Trans } from 'react-i18next';
-import i18next from 'i18next';
+import i18next, { TFunction } from 'i18next';
 import { helpers } from '../../common';
 
 const EMPTY_CONTEXT: string = 'LOCALE_EMPTY_CONTEXT';
 
 const translate = (
+  t: TFunction,
   translateKey: string | string[],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   values: string | any | string[] | any[] | null = null,
-  components: readonly React.ReactElement[] | { readonly [tagName: string]: React.ReactElement },
+  components:
+    | readonly React.ReactElement[]
+    | { readonly [tagName: string]: React.ReactElement } = {},
   { emptyContextValue = EMPTY_CONTEXT } = {}
-): string | React.ReactNode | object => {
+): string | React.ReactNode => {
   const updatedValues = values || {};
   let updatedTranslateKey = translateKey;
 
   if (Array.isArray(updatedTranslateKey)) {
-    updatedTranslateKey = updatedTranslateKey.filter(value => typeof value === 'string' && value.length > 0);
+    updatedTranslateKey = updatedTranslateKey.filter(
+      value => typeof value === 'string' && value.length > 0
+    );
   }
 
   if (Array.isArray(updatedValues?.context)) {
@@ -46,13 +52,15 @@ const translate = (
 
   if (components) {
     return (
-      (i18next.store && <Trans i18nKey={updatedTranslateKey} values={updatedValues} components={components} />) || (
-        <React.Fragment>t({updatedTranslateKey})</React.Fragment>
-      )
+      (i18next.store && (
+        <Trans i18nKey={updatedTranslateKey} values={updatedValues} components={components} />
+      )) || <React.Fragment>t({updatedTranslateKey})</React.Fragment>
     );
   }
 
-  return (i18next.store && i18next.t(updatedTranslateKey, updatedValues)) || `t([${updatedTranslateKey}])`;
+  return (
+    (t(updatedTranslateKey, updatedValues) as React.ReactNode) || `t([${updatedTranslateKey}])`
+  );
 };
 
 const i18nHelpers = { EMPTY_CONTEXT, translate };

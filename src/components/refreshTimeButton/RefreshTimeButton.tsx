@@ -15,7 +15,7 @@ const RefreshTimeButton: React.FC<RefreshTimeButtonProps> = ({ lastRefresh = 0, 
     lastRefresh ? helpers.getTimeDisplayHowLongAgo(lastRefresh) : null
   );
 
-  const pollingInterval = React.useRef<any>();
+  const pollingInterval = React.useRef<NodeJS.Timeout>();
 
   React.useEffect(() => {
     pollingInterval.current = setInterval(() => {
@@ -26,7 +26,7 @@ const RefreshTimeButton: React.FC<RefreshTimeButtonProps> = ({ lastRefresh = 0, 
 
     return () => {
       clearInterval(pollingInterval.current);
-      pollingInterval.current = null;
+      pollingInterval.current = undefined;
     };
   }, [lastRefresh]);
 
