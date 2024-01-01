@@ -83,7 +83,7 @@
     "prettier": "^3.0.0",
     "raw-loader": "^4.0.2",
     "react-docgen-typescript-loader": "^3.7.2",
-    "regenerator-runtime": "^0.13.11",
+    "regenerator-runtime": "^0.14.1",
     "rimraf": "^5.0.1",
     "sass": "^1.65.1",
     "sass-loader": "^13.3.2",
